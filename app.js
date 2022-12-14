@@ -7,6 +7,7 @@ const { MongoClient } = require('mongodb');
 const mongoose = require('mongoose');
 const cors = require('cors');
 var bodyParser = require('body-parser');
+const path = require('path');
 async function main() {
     try {
         //Mongostore for storing sessions in mongodb
@@ -43,7 +44,14 @@ async function main() {
         app.use(cors({
         "origin": "http://localhost:3000",
         "optionsSuccessStatus": 200
-    }));
+        }));
+        
+        app.use(express.static(path.join(__dirname, 'build')));
+
+        app.get('/', function (req, res) {
+        res.sendFile(path.join(__dirname, 'build', 'index.html'));
+        });
+                
         app.use('/', require('./routes/routes'));
 
 
