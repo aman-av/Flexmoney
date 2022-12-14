@@ -2,6 +2,9 @@ import React,{useEffect,useState} from "react";
 import { Container, Form, Button, Tabs, Tab, Toast, Alert } from 'react-bootstrap';
 // import instance from "../helpers/instance";
 import axios from 'axios'
+
+import { useNavigate } from "react-router-dom";
+
 // const instance = axios.create({ withCredentials: true });
 // import instance from './../helpers/instance'
 function Login() {
@@ -12,44 +15,45 @@ function Login() {
   const [loginpassword, setLoginPassword] = useState("");
   const [name, setName] = useState("");
   const [age, setAge] = useState();
-  const [timeslot, setTimeslot] = useState(1);
-  
   const [show, setShow] = useState(false);
   const toggleShow = () => setShow(!show);
 
   // const Toastcomp = () => {
   //   return (
-  //     // <div className="position-relative">
-  //       <Toast show={show} onClose={toggleShow} position="middle-center">
-  //         <Toast.Header>
-  //           <img
-  //             src="holder.js/20x20?text=%20"
-  //             className="rounded me-2"
-  //             alt=""
-  //             />
-  //           <strong className="me-auto">Bootstrap</strong>
-  //           <small>11 mins ago</small>
-  //         </Toast.Header>
-  //         <Toast.Body>Woohoo, you're reading this text in a Toast!</Toast.Body>
-  //       </Toast>
-  //     // </div>
-  //   );
-  // }
-
+    //     // <div className="position-relative">
+    //       <Toast show={show} onClose={toggleShow} position="middle-center">
+    //         <Toast.Header>
+    //           <img
+    //             src="holder.js/20x20?text=%20"
+    //             className="rounded me-2"
+    //             alt=""
+    //             />
+    //           <strong className="me-auto">Bootstrap</strong>
+    //           <small>11 mins ago</small>
+    //         </Toast.Header>
+    //         <Toast.Body>Woohoo, you're reading this text in a Toast!</Toast.Body>
+    //       </Toast>
+    //     // </div>
+    //   );
+    // }
+    const navigate = useNavigate();
+    
   const handler2 = async (e) => {
     e.preventDefault();
     let data = {
       name:name,
       email: email,
       password: password,
-      timeslot: timeslot,
       age:age
       
     }
     const res = await axios.post('/signup', data);
     console.log(res);
+    if(res.data.auth===true)
+    navigate('/home')
   }
   
+
   const handler = async(e) => {
     e.preventDefault();
     let data = {
@@ -58,14 +62,16 @@ function Login() {
       password: loginpassword,
 
     }
-    console.log(data);
     const res = await axios.post('/login', data);
+    console.log(res);
+     if(res.data.auth===true)
+    navigate('/home')
     // console.log(res);
   }
  
 
   return (
-    <Container style={{marginTop:"5%"}}>
+    <Container style={{marginTop:"10%"}}>
       {/* <Toastcomp /> */}
        <Toast show={show} onClose={toggleShow} position="right">
           <Toast.Header>
@@ -128,16 +134,7 @@ function Login() {
           </Form.Group>
         
           
-          <Form.Group className="mb-3" controlId="timeslot" required onChange={e=>setTimeslot(e.target.value)}>
-            <Form.Label>Time Slot</Form.Label>
-            <Form.Select validated="true"  aria-label="Default select example">
-              <option value="1">6-7 AM</option>
-              <option value="2">7-8 AM</option>
-              <option value="3">8-9 AM</option>
-              <option value="4">5-6 PM</option>
-              </Form.Select>
-          </Form.Group>
-        
+         
           <Button variant="primary" type="submit" validated="true"  >
             Submit
           </Button>

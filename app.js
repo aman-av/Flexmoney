@@ -24,8 +24,8 @@ async function main() {
         mongoose.set('strictQuery', false);
         await mongoose.connect(keys.mongoURI,
         {
+            useNewUrlParser:true,
             useUnifiedTopology:true,
-            useNewUrlParser:true
             });
         
         app.use(session({
@@ -34,7 +34,7 @@ async function main() {
             secure: true,
             saveUninitialized: false,
             cookie: {
-                maxAge: 60 * 60 * 1000,
+                maxAge: 24*60 * 60 * 1000,
             },
             store: store
         }));
